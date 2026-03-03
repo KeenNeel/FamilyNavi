@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Family Navi 3.6</title>
+    <title>Smart Family Navi 4.0</title>
     <style>
         :root { 
             --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #334155; 
@@ -15,7 +15,7 @@
             --primary-blue: #60a5fa; --secondary-gray: #9ca3af;
         }
         body { 
-            margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+            margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             background: var(--bg-color); color: var(--text-main); 
             padding: 15px 15px 80px 15px; transition: background-color 0.3s;
         }
@@ -55,6 +55,10 @@
             border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 600; 
             padding: 12px 2px; color: var(--text-main); background: #f8fafc; text-align: center;
         }
+        .input-dest { 
+            flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px;
+            background: var(--card-bg); color: var(--text-main); -webkit-appearance: none;
+        }
     </style>
 </head>
 <body>
@@ -64,11 +68,6 @@
         <button onclick="toggleDarkMode()" style="position: absolute; top: 15px; right: 10px; background: none; border: none; font-size: 24px;">🌓</button>
     </div>
 
-    <div class="card" style="padding: 0; overflow: hidden; height: 180px; position: relative;">
-        <div id="map-msg" style="position:absolute; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#eee; z-index:1; font-size:12px;">📍 位置情報を取得中...</div>
-        <iframe id="map-frame" width="100%" height="180" frameborder="0" style="border:0; z-index:2; position:relative; display:none;"></iframe>
-    </div>
-
     <div class="section-title title-alert">⚠️ 緊急連絡・救急病院</div>
     <div class="card" style="background:#fef2f2; border: 1px solid #fca5a5;">
         <div class="grid-2" style="margin-bottom: 10px;">
@@ -76,6 +75,12 @@
             <a href="tel:110" class="btn-dest" style="background:#444; font-size:18px;">🚓 110 (警察)</a>
         </div>
         <a href="https://www.google.com/maps/search/?api=1&query=救急病院" class="btn-emergency bg-red">🏥 近くの救急病院を検索</a>
+    </div>
+
+    <div class="section-title">現在地マップ</div>
+    <div class="card" style="padding: 0; overflow: hidden; height: 200px; position: relative;">
+        <div id="map-msg" style="position:absolute; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#eee; z-index:1; font-size:12px;">📍 位置情報を取得中...</div>
+        <iframe id="map-frame" width="100%" height="200" frameborder="0" style="border:0; z-index:2; position:relative; display:none;"></iframe>
     </div>
 
     <div class="section-title">ルート案内 (公共交通)</div>
@@ -88,16 +93,10 @@
             <a href="https://www.google.com/maps/dir/?api=1&destination=34.491866,134.861292&travelmode=transit" class="btn-dest bg-sub2">🏡 淡路島実家</a>
             <a href="https://www.google.com/maps/dir/?api=1&destination=東京都千代田区霞が関3-2-1&travelmode=transit" class="btn-dest bg-main">🏢 パパ会社</a>
         </div>
-        <div class="search-box">
+        <div class="search-box" style="display:flex; gap:8px; margin-top:15px;">
             <input type="search" id="customDest" class="input-dest" placeholder="駅名・場所を入力">
             <button style="background: var(--primary-blue); color: white; border: none; border-radius: 8px; padding: 0 15px; font-weight: bold;" onclick="search()">Go</button>
         </div>
-    </div>
-
-    <div class="section-title">今日の運勢 ＆ お出かけ</div>
-    <div class="card">
-        <button onclick="askFortune()" class="btn-line" style="background: linear-gradient(135deg, #6366f1, #a855f7); margin-bottom: 15px;">✨ 5人の運勢と献立を聞く</button>
-        <a href="https://www.google.com/maps/search/?api=1&query=飲食店" class="btn-emergency bg-orange" style="margin-bottom: 0;">🍴 近くの飲食店を探す</a>
     </div>
 
     <div class="section-title">バス運行状況</div>
@@ -116,6 +115,16 @@
         <button class="btn-line" style="background:#f8fafc; color:var(--text-main); border:1px solid #cbd5e1;" onclick="sendLoc()">📍 現在地をLINEで送る</button>
     </div>
 
+    <div class="section-title">周辺検索</div>
+    <div class="card">
+        <a href="https://www.google.com/maps/search/?api=1&query=飲食店" class="btn-emergency bg-orange" style="margin-bottom: 0;">🍴 近くの飲食店を探す</a>
+    </div>
+
+    <div class="section-title">家族の運勢 ＆ 今夜の献立</div>
+    <div class="card" style="border: 2px solid #e2e8f0; background: linear-gradient(to bottom, #ffffff, #f8fafc);">
+        <button onclick="askFortune()" class="btn-line" style="background: linear-gradient(135deg, #6366f1, #a855f7); margin-bottom: 0;">✨ 5人の運勢と献立を聞く</button>
+    </div>
+
 <script>
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
@@ -124,19 +133,22 @@
 
     function search() {
         const val = document.getElementById('customDest').value;
-        if (val) window.location.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(val)}&travelmode=transit`;
+        if (val) {
+            window.location.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(val)}&travelmode=transit`;
+        }
     }
 
     function askFortune() {
         const family = "1.パパ(1969/12/15,AB) 2.ママ(1972/8/24,A) 3.あすか(2001/7/23,A) 4.はるな(2004/5/10,AB) 5.こうせい(2010/9/21,A)";
-        const prompt = `今日(${new Date().toLocaleDateString()})の5人の運勢を占って。星座は正確に。各人にアドバイス,ランチ,カラー,NGワード等を出して。最後に全員の運勢と季節から今夜の献立候補を理由を添えて5つ提案して。データ:${family}`;
+        const prompt = `今日(${new Date().toLocaleDateString()})の5人の運勢を占って。星座は正確に。各人にアドバイス,ランチ,ラッキーカラー,洋服,心がけ,NGワードを出して。最後に全員の運勢と季節から今夜の献立候補を理由を添えて5つ提案して。データ:${family}`;
         window.open("https://chatgpt.com/?q=" + encodeURIComponent(prompt), "_blank");
     }
 
     function sendLoc() {
+        if (!navigator.geolocation) return alert("GPSを許可してください");
         navigator.geolocation.getCurrentPosition(p => {
             const url = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-            window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("現在地：\n" + url);
+            window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("現在地はここです：\n" + url);
         });
     }
 
