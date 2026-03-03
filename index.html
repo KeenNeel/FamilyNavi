@@ -130,7 +130,7 @@
     <div class="section-title">ルート案内（Googleマップ）</div>
     <div class="card">
         <div class="grid-2">
-            <button class="btn-dest bg-main" onclick="window.location.href='https://maps.app.goo.gl/uRrhdMwya6zMgz7b6'">🏠 自宅へ帰る</button>
+            <button class="btn-dest bg-main" onclick="navTo('自宅')">🏠 自宅へ帰る</button>
             <button class="btn-dest bg-sub1" onclick="navTo('東京都小平市津田町2-1-1')">🏫 はるな大学 (津田塾)</button>
             <button class="btn-dest bg-sub1" onclick="navTo('東京都港区港南4-5-7')">🏫 明日香大学 (海洋大)</button>
             <button class="btn-dest bg-sub2" onclick="navTo('東京都江東区越中島2-2-8')">🛏️ 明日香寮 (海王寮)</button>
@@ -155,7 +155,7 @@
 
     <div class="section-title">周辺検索</div>
     <div class="card">
-        <button onclick="navTo('近くの飲食店')" class="btn-map" style="border-color: #ea580c; color: #ea580c; background: #fff7ed;">🍴 近くの飲食店をマップで探す</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=飲食店" target="_blank" class="btn-map" style="border-color: #ea580c; color: #ea580c; background: #fff7ed; text-decoration: none;">🍴 近くの飲食店をマップで探す</a>
     </div>
 
     <div class="section-title">運行情報・タクシー</div>
@@ -176,19 +176,19 @@
 
     <div class="section-title">ChatGPTに今日の話題を聞く</div>
     <div class="card">
-        <a href="https://chatgpt.com/?q=X（旧Twitter）で今現在、日本で話題になっている最新トレンドやニュースをいくつか教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #000000;">🤖 X(Grok)風：最新トレンドを聞く</a>
-        <a href="https://chatgpt.com/?q=今日家族で話すのにふさわしい、明るくてためになる世間の話題をいくつか教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #10a37f;">🤖 今日のおすすめの話題を聞く</a>
-        <a href="https://chatgpt.com/?q=ビジネスパーソンや会社員の間で、今朝話題になっているニュースや仕事に役立つ雑談ネタを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 会社員向けの話題を聞く</a>
-        <a href="https://chatgpt.com/?q=大学生の間で今流行っていることや、キャンパスライフで話題になりそうなニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 大学生向けの話題を聞く</a>
-        <a href="https://chatgpt.com/?q=高校生の間で今流行っているSNSのトレンドや、学校で話せる最新ニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 高校生向けの話題を聞く</a>
-        <a href="https://chatgpt.com/?q=ジャニーズ系アイドル（新会社所属・独立・脱退含む）の最新ライブ情報、出演情報、ニュースをまとめて教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #0078d4;">🤖 アイドル最新情報を聞く</a>
+        <a href="https://chatgpt.com/?q=Xで話題になっている最新トレンドやニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #000000;">🤖 X(Grok)風：最新トレンドを聞く</a>
+        <a href="https://chatgpt.com/?q=今日家族で話すのにふさわしい話題をいくつか教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #10a37f;">🤖 今日のおすすめの話題を聞く</a>
+        <a href="https://chatgpt.com/?q=会社員の間で話題になっているビジネスや雑談ネタを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 会社員向けの話題を聞く</a>
+        <a href="https://chatgpt.com/?q=大学生の間で流行っていることやニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 大学生向けの話題を聞く</a>
+        <a href="https://chatgpt.com/?q=高校生の間で流行っているSNSのトレンドやニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 高校生向けの話題を聞く</a>
+        <a href="https://chatgpt.com/?q=ジャニーズ系アイドルの最新情報をまとめて教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #0078d4;">🤖 アイドル最新情報を聞く</a>
     </div>
 
     <div class="section-title title-alert">⚠️ 緊急連絡先</div>
     <div class="card" style="border:2px solid #fca5a5; background:#fef2f2;">
         <a href="tel:110" class="btn-emergency bg-red">🚓 警察 (110番)</a>
         <a href="tel:119" class="btn-emergency bg-red">🚑 救急・消防 (119番)</a>
-        <a href="https://www.google.com/search?q=現在地+近くの救急病院" target="_blank" class="btn-emergency bg-orange">🏥 近くの救急病院を検索</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=救急病院" target="_blank" class="btn-emergency bg-orange">🏥 近くの救急病院を検索</a>
     </div>
 
 <script>
@@ -198,32 +198,36 @@
     }
 
     function navTo(dest) {
-        window.location.href = `https://www.google.com/maps/dir/?api=1&destination=$&q=${encodeURIComponent(dest)}&travelmode=transit`;
+        // 特殊記号を使わない安全な書き方に修正
+        var url = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(dest) + "&travelmode=transit";
+        window.location.href = url;
     }
 
     function searchCustomDest() {
-        const dest = document.getElementById('customDest').value;
+        var dest = document.getElementById('customDest').value;
         if (dest) navTo(dest);
     }
 
     function openBusRoute(routeType) {
-        let s = "", g = "";
+        var s = "", g = "";
         if(routeType === 1){ s="00021091"; g="00021109"; }
         else if(routeType === 2){ s="00021109"; g="00021091"; }
         else if(routeType === 3){ s="00021091"; g="00021013"; }
         else if(routeType === 4){ s="00021013"; g="00021091"; }
-        window.location.href = `https://transfer.navitime.biz/5931bus/smart/location/BusLocationResult?startId=${s}&goalId=${g}`;
+        window.location.href = "https://transfer.navitime.biz/5931bus/smart/location/BusLocationResult?startId=" + s + "&goalId=" + g;
     }
 
     function sendLine() {
-        window.location.href = `https://line.me/R/share?text=${encodeURIComponent("今から帰ります！")}`;
+        window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("今から帰ります！");
     }
 
     function sendLocationLine() {
         if (!navigator.geolocation) return alert("GPS未対応です");
         navigator.geolocation.getCurrentPosition(function(p) {
-            const url = `https://www.google.com/maps/dir/?api=1&destination=$&q=${p.coords.latitude},${p.coords.longitude}`;
-            window.location.href = `https://line.me/R/share?text=${encodeURIComponent("現在の位置情報：\n"+url)}`;
+            var lat = p.coords.latitude;
+            var lng = p.coords.longitude;
+            var url = "https://www.google.com/maps?q=" + lat + "," + lng;
+            window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("現在の位置情報：\n" + url);
         });
     }
 
@@ -231,8 +235,10 @@
         if (localStorage.getItem('darkMode') === '1') document.body.classList.add('dark-mode');
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(p) {
-                const ifr = document.getElementById('map-iframe');
-                ifr.src = `https://maps.google.co.jp/maps?output=embed&q=${p.coords.latitude},${p.coords.longitude}&z=16`;
+                var lat = p.coords.latitude;
+                var lng = p.coords.longitude;
+                var ifr = document.getElementById('map-iframe');
+                ifr.src = "https://maps.google.co.jp/maps?output=embed&q=" + lat + "," + lng + "&z=16";
                 document.getElementById('map-loading').style.display = 'none';
                 ifr.style.display = 'block';
             });
