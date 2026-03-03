@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Family Navi 2.2</title>
+    <title>Smart Family Navi 2.1</title>
     <style>
         :root { 
             --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #334155; 
             --primary-blue: #1e40af; --secondary-gray: #64748b;
             --line-green: #06C755; --alert-red: #dc2626; 
+        }
+        body.dark-mode {
+            --bg-color: #121212; --card-bg: #1e1e1e; --text-main: #e0e0e0; 
+            --primary-blue: #60a5fa; --secondary-gray: #9ca3af;
         }
         body { 
             margin: 0; font-family: "Helvetica Neue", Arial, sans-serif; 
@@ -44,13 +48,6 @@
             width: 100%; padding: 16px; background: var(--line-green); color: white; 
             border: none; border-radius: 8px; margin-bottom: 12px; font-size: 15px; font-weight: bold;
         }
-        .btn-emergency { 
-            display: flex; align-items: center; justify-content: center; width: 100%; 
-            padding: 16px; margin-bottom: 10px; border-radius: 8px; font-size: 15px; 
-            font-weight: bold; color: white; text-decoration: none; 
-        }
-        .bg-red { background: #dc2626; }
-        .bg-orange { background: #ea580c; }
     </style>
 </head>
 <body>
@@ -86,18 +83,18 @@
         <button class="btn-line" style="background:#f8fafc; color:var(--text-main); border:1px solid #cbd5e1;" onclick="sendLoc()">📍 現在地を送る</button>
     </div>
 
-    <div class="section-title" style="color:var(--alert-red);">⚠️ 緊急・周辺検索</div>
-    <div class="card" style="background:#fef2f2;">
-        <button onclick="findNearby('救急病院')" class="btn-emergency bg-red">🏥 近くの救急病院</button>
-        <button onclick="findNearby('飲食店')" class="btn-emergency bg-orange">🍴 近くの飲食店</button>
-        <a href="tel:110" class="btn-emergency bg-red" style="background:#444;">🚓 警察 (110)</a>
-    </div>
-
 <script>
-    // 1. Googleマップのルート案内（ユニバーサル形式）
+    // ルート案内を実行する関数
     function nav(destination) {
-        // 公式：https://www.google.com/maps/dir/?api=1&...
-        const url = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(destination) + "&travelmode=transit";
+        // スマホでアプリを確実に開くための最新URL形式
+        // dir_action=navigate は運転用なので、家族利用を想定し全体の「dir」を使用
+        const baseUrl = "https://www.google.com/maps/dir/?api=1";
+        const encodedDest = encodeURIComponent(destination);
+        
+        // 公共交通機関(transit)をデフォルトに設定
+        const url = `${baseUrl}&destination=${encodedDest}&travelmode=transit`;
+        
+        // 新しいタブではなく、現在のウィンドウで開くことでアプリ起動を促す
         window.location.href = url;
     }
 
@@ -106,33 +103,26 @@
         if (val) nav(val);
     }
 
-    // 2. 近くの場所を検索（救急病院・飲食店など）
-    function findNearby(keyword) {
-        // 公式：https://www.google.com/maps/search/?api=1&...
-        const url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(keyword);
-        window.location.href = url;
-    }
-
-    // 3. 運勢AI（ChatGPT）
+    // 運勢AIへのリンク
     function askFortune() {
         const family = "1.パパ(1969/12/15,AB) 2.ママ(1972/8/24,A) 3.あすか(2001/7/23,A) 4.はるな(2004/5/10,AB) 5.こうせい(2010/9/21,A)";
         const date = new Date().toLocaleDateString();
-        const prompt = `今日(${date})の家族5人の運勢を占って。各人にアドバイス,ランチ,ラッキーカラーを出して。最後に全員の運勢から今夜の献立候補を5つ提案して。データ:${family}`;
+        const prompt = `今日(${date})の家族5人の運勢を占って。各人に運勢,ランチ,ラッキーカラー,心がけを出して。最後に全員の運勢から今夜の献立候補を5つ提案して。データ:${family}`;
+        
+        // 長い文字列を安全に飛ばす
         window.open("https://chatgpt.com/?q=" + encodeURIComponent(prompt), "_blank");
     }
 
-    // 4. LINE連絡
     function sendLine(msg) {
         window.location.href = "https://line.me/R/share?text=" + encodeURIComponent(msg);
     }
 
-    // 5. 現在地LINE送信
     function sendLoc() {
-        if (!navigator.geolocation) return alert("GPSを許可してください");
+        if (!navigator.geolocation) return alert("GPSがオフです");
         navigator.geolocation.getCurrentPosition(p => {
             const locUrl = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
             sendLine("現在地はここです：\n" + locUrl);
-        }, () => alert("位置情報を取得できませんでした"));
+        }, () => alert("位置情報を許可してください"));
     }
 </script>
 </body>
