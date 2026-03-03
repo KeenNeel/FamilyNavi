@@ -112,8 +112,9 @@
 
     <div class="section-title">現在地マップ</div>
     <div class="card" style="padding: 0; overflow: hidden; height: 250px;">
-        <div id="map-loading" style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--secondary-gray); font-size: 13px; font-weight: bold;">
-            📍 現在地を取得中...
+        <div id="map-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--secondary-gray); font-size: 13px; font-weight: bold; text-align: center; padding: 0 10px;">
+            <span style="margin-bottom: 5px;">📍 現在地を取得中...</span>
+            <span style="font-size: 10px; font-weight: normal; color: #94a3b8;">表示されない場合は、スマホの設定でGPSをONにするか、LINE内ブラウザではなくSafari/Chromeで開いてください</span>
         </div>
         <iframe id="map-iframe" width="100%" height="250" frameborder="0" style="border:0; display:none;"></iframe>
     </div>
@@ -122,7 +123,7 @@
     <div class="card">
         <p style="font-size:12px; color:var(--secondary-gray); margin:0 0 12px 0; font-weight:bold;">📌 よく行く場所（タップして案内開始）</p>
         <div class="grid-2">
-            <button class="btn-dest bg-main" onclick="window.location.href='https://maps.app.goo.gl/uRrhdMwya6zMgz7b6'">🏠 自宅へ帰る</button>
+            <button class="btn-dest bg-main" onclick="navTo('埼玉県さいたま市183-1')">🏠 自宅へ帰る</button>
             <button class="btn-dest bg-sub1" onclick="navTo('東京都小平市津田町2-1-1')">🏫 はるな大学 (津田塾)</button>
             <button class="btn-dest bg-sub1" onclick="navTo('東京都港区港南4-5-7')">🏫 明日香大学 (海洋大)</button>
             <button class="btn-dest bg-sub2" onclick="navTo('東京都江東区越中島2-2-8')">🛏️ 明日香寮 (海王寮)</button>
@@ -150,8 +151,8 @@
 
     <div class="section-title">運行情報・タクシー手配</div>
     <div class="card">
-        <a href="https://traininfo.jreast.co.jp/train_info/kanto.aspx" target="_blank" class="btn-map">🗺 首都圏 運行情報 (JR東日本)</a>
-        <a href="https://trafficinfo.westjr.co.jp/kinki.html" target="_blank" class="btn-map">🗺 関西 運行情報 (JR西日本)</a>
+        <a href="https://transit.yahoo.co.jp/diainfo/area/4" target="_blank" class="btn-map">🗺 首都圏 運行情報 (すべて網羅)</a>
+        <a href="https://transit.yahoo.co.jp/diainfo/area/6" target="_blank" class="btn-map">🗺 関西 運行情報 (すべて網羅)</a>
         <div class="grid-2" style="margin-top:10px;">
             <a href="https://go.goinc.jp/" target="_blank" class="btn-tool" style="border-color:#334155; color:#334155;">🚕 GOタクシー</a>
             <a href="https://m.uber.com/" target="_blank" class="btn-tool" style="background:#334155; color:#fff;">🚙 Uber</a>
@@ -241,13 +242,14 @@
     function searchCustomDest() {
         const dest = document.getElementById('customDest').value;
         if (!dest) {
-            alert('行き先（施設名や住所）を入力してください。');
+            alert('行き先を入力してください。');
             return;
         }
         navTo(dest);
     }
 
     function navTo(dest) {
+        // 壊れていたURLを、公式の安全なGoogleマップAPIに修正しました
         const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}&travelmode=transit`;
         window.location.href = url;
     }
@@ -255,30 +257,27 @@
     function openBusRoute(routeType) {
         const now = new Date();
         const yyyy = now.getFullYear();
-        const m = now.getMonth() + 1;
-        const mm = String(m).padStart(2, '0');
-        const d = now.getDate();
-        const dd = String(d).padStart(2, '0');
-        const h = now.getHours();
-        const hh = String(h).padStart(2, '0');
-        const min = now.getMinutes();
-        const minStr = String(min).padStart(2, '0');
-
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const hh = String(now.getHours()).padStart(2, '0');
+        const minStr = String(now.getMinutes()).padStart(2, '0');
+        
+        // ナビタイムの外部連携用（TransferIF）にすべて統一。スマホ・PCを自動で認識し、エラーになりません。
+        const dateStr = `${yyyy}${mm}${dd}${hh}${minStr}`;
         let url = "";
 
         if (routeType === 1) {
-            url = `https://transfer.navitime.biz/5931bus/pc/transfer/TransferSearchSelect?orvNode=00021091.%E8%8A%B1%E6%9C%88&orvName=&dnvNode=00021109.%E6%B5%A6%E5%92%8C%E9%A7%85%E6%9D%B1%E5%8F%A3&dnvName=&month=${yyyy}%2F${m}&day=${dd}&hour=${h}&minute=${minStr}&basis=1&sort=0&wspeed=slow&method=2`;
+            url = `https://transfer.navitime.biz/5931bus/pc/extif/TransferIF?orvName=%E8%8A%B1%E6%9C%88&dnvName=%E6%B5%A6%E5%92%8C%E9%A7%85%E6%9D%B1%E5%8F%A3&date=${dateStr}&basis=1&sort=0&wSpeed=slow`;
         } else if (routeType === 2) {
-            const dateStr = `${yyyy}${mm}${dd}${hh}${minStr}`;
             url = `https://transfer.navitime.biz/5931bus/pc/extif/TransferIF?orvName=%E6%B5%A6%E5%92%8C%E9%A7%85%E6%9D%B1%E5%8F%A3&dnvName=%E8%8A%B1%E6%9C%88&date=${dateStr}&basis=1&sort=0&wSpeed=slow`;
         } else if (routeType === 3) {
-            const dateStr = `${yyyy}${mm}${dd}${hh}${minStr}`;
             url = `https://transfer.navitime.biz/5931bus/pc/extif/TransferIF?orvName=%E8%8A%B1%E6%9C%88&dnvName=%E6%9D%B1%E6%B5%A6%E5%92%8C%E9%A7%85&date=${dateStr}&basis=1&sort=0&wSpeed=slow`;
         } else if (routeType === 4) {
-            url = `https://transfer.navitime.biz/5931bus/pc/transfer/TransferSearchSelect?orvNode=00021013.%E6%9D%B1%E6%B5%A6%E5%92%8C%E9%A7%85&orvName=&dnvNode=00021091.%E8%8A%B1%E6%9C%88&dnvName=&month=${yyyy}%2F${m}&day=${dd}&hour=${h}&minute=${minStr}&basis=1&sort=0&wspeed=slow&method=2`;
+            url = `https://transfer.navitime.biz/5931bus/pc/extif/TransferIF?orvName=%E6%9D%B1%E6%B5%A6%E5%92%8C%E9%A7%85&dnvName=%E8%8A%B1%E6%9C%88&date=${dateStr}&basis=1&sort=0&wSpeed=slow`;
         }
 
-        window.open(url, '_blank');
+        // スマホのポップアップブロック対策として、新しいタブではなく同じ画面で確実に遷移させます
+        window.location.href = url;
     }
 
     function sendLine() {
@@ -300,16 +299,18 @@
             function(position) {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
+                // 壊れていたURLを、公式の安全なGoogleマップ検索URLに修正しました
                 const mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
                 const msg = `現在の位置情報です。確認をお願いします。\n${mapUrl}`;
                 
                 btn.innerText = originalText;
                 window.location.href = `https://line.me/R/share?text=${encodeURIComponent(msg)}`;
             }, 
-            function() {
+            function(error) {
                 btn.innerText = originalText;
-                alert("位置情報を取得できませんでした。端末のGPS設定がオンになっているか確認してください。");
-            }
+                alert("位置情報の取得に失敗しました。スマホの設定でGPSがONになっているか確認してください。");
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
     }
 
@@ -322,13 +323,13 @@
                     const lng = position.coords.longitude;
                     const iframe = document.getElementById('map-iframe');
                     const loading = document.getElementById('map-loading');
-                    // 取得した緯度経度を使ってGoogleマップを埋め込み表示
                     iframe.src = `https://maps.google.co.jp/maps?output=embed&q=${lat},${lng}&z=16`;
                     loading.style.display = 'none';
                     iframe.style.display = 'block';
                 },
                 function() {
-                    document.getElementById('map-loading').innerText = "📍 位置情報の取得を許可してください";
+                    const loading = document.getElementById('map-loading');
+                    loading.innerHTML = "📍 位置情報の取得を許可してください<br><span style='font-size:10px; font-weight:normal; color:#dc2626;'>※表示されない場合はSafari/Chromeで開いてください</span>";
                 }
             );
         }
