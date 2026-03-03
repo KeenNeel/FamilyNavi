@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Family Navi 3.0</title>
+    <title>Smart Family Navi 3.1</title>
     <style>
         :root { 
             --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #334155; 
@@ -30,10 +30,12 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #e2e8f0; 
         }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        /* リンクをボタンに見せるスタイル */
         .btn-dest { 
             display: flex; align-items: center; justify-content: center; height: 55px;
-            font-size: 13px; font-weight: bold; color: white; border: none; 
-            border-radius: 8px; cursor: pointer; text-decoration: none; text-align: center;
+            font-size: 13px; font-weight: bold; color: white; border-radius: 8px; 
+            text-decoration: none; text-align: center; line-height: 1.2;
         }
         .bg-main { background: linear-gradient(135deg, #1e40af, #3b82f6); }
         .bg-sub1 { background: linear-gradient(135deg, #475569, #64748b); }
@@ -44,14 +46,10 @@
             flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px;
             background: var(--card-bg); color: var(--text-main);
         }
-        .btn-tool { 
-            display: flex; align-items: center; justify-content: center; text-decoration: none; 
-            border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 600; 
-            padding: 12px 2px; color: var(--text-main); background: #f8fafc; text-align: center;
-        }
         .btn-line { 
-            width: 100%; padding: 16px; background: var(--line-green); color: white; 
+            display: block; width: 100%; padding: 16px; background: var(--line-green); color: white; 
             border: none; border-radius: 8px; margin-bottom: 12px; font-size: 15px; font-weight: bold;
+            text-decoration: none; text-align: center; box-sizing: border-box;
         }
         .btn-emergency { 
             display: flex; align-items: center; justify-content: center; width: 100%; 
@@ -69,21 +67,15 @@
         <button onclick="toggleDarkMode()" style="position: absolute; top: 15px; right: 10px; background: none; border: none; font-size: 24px;">🌓</button>
     </div>
 
-    <div class="section-title">現在地マップ</div>
-    <div class="card" style="padding: 0; overflow: hidden; height: 200px;">
-        <div id="map-loading" style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--secondary-gray);">📍 現在地を取得中...</div>
-        <iframe id="map-iframe" width="100%" height="200" frameborder="0" style="border:0; display:none;"></iframe>
-    </div>
-
-    <div class="section-title">ルート案内 (公共交通機関)</div>
+    <div class="section-title">ルート案内 (公共交通)</div>
     <div class="card">
         <div class="grid-2">
-            <button class="btn-dest bg-main" onclick="nav('自宅')">🏠 自宅へ</button>
-            <button class="btn-dest bg-sub1" onclick="nav('東京都小平市津田町2-1-1')">🏫 はるな大学</button>
-            <button class="btn-dest bg-sub1" onclick="nav('東京都港区港南4-5-7')">🏫 明日香大学</button>
-            <button class="btn-dest bg-sub2" onclick="nav('東京都江東区越中島2-2-8')">🛏️ 明日香寮</button>
-            <button class="btn-dest bg-sub2" onclick="nav('34.491866,134.861292')">🏡 淡路島実家</button>
-            <button class="btn-dest bg-main" onclick="nav('東京都千代田区霞が関3-2-1')">🏢 パパ会社</button>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=自宅&travelmode=transit" class="btn-dest bg-main">🏠 自宅へ</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都小平市津田町2-1-1&travelmode=transit" class="btn-dest bg-sub1">🏫 はるな大学</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都港区港南4-5-7&travelmode=transit" class="btn-dest bg-sub1">🏫 明日香大学</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都江東区越中島2-2-8&travelmode=transit" class="btn-dest bg-sub2">🛏️ 明日香寮</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=34.491866,134.861292&travelmode=transit" class="btn-dest bg-sub2">🏡 淡路島実家</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都千代田区霞が関3-2-1&travelmode=transit" class="btn-dest bg-main">🏢 パパ会社</a>
         </div>
         <div class="search-box">
             <input type="text" id="customDest" class="input-dest" placeholder="駅名・場所を入力">
@@ -93,101 +85,51 @@
 
     <div class="section-title">家族全員の運勢 ＆ 今夜の献立</div>
     <div class="card" style="border: 2px solid #e2e8f0; background: linear-gradient(to bottom, #ffffff, #f8fafc);">
-        <p style="font-size: 11px; color: var(--secondary-gray); text-align: center; margin-bottom: 10px;">
-            AIが5人の運勢を分析し、最適な晩ごはんを提案します。
-        </p>
-        <button onclick="askFortune()" class="btn-line" style="background: linear-gradient(135deg, #6366f1, #a855f7); margin-bottom: 0;">✨ 5人の運勢と献立を聞く</button>
-    </div>
-
-    <div class="section-title">バスのリアルタイム案内</div>
-    <div class="card">
-        <div class="grid-2">
-            <button onclick="openBus(1)" class="btn-tool">花月➡浦和駅</button>
-            <button onclick="openBus(2)" class="btn-tool">浦和駅➡花月</button>
-            <button onclick="openBus(3)" class="btn-tool">花月➡東浦和</button>
-            <button onclick="openBus(4)" class="btn-tool">東浦和➡花月</button>
-        </div>
+        <button onclick="askFortune()" class="btn-line" style="background: linear-gradient(135deg, #6366f1, #a855f7); margin-bottom: 0; cursor: pointer;">✨ 5人の運勢と献立を聞く</button>
     </div>
 
     <div class="section-title">連絡</div>
     <div class="card">
-        <button class="btn-line" onclick="sendLine('今から帰ります！')">💬 今から帰る</button>
-        <button class="btn-line" style="background:#f8fafc; color:var(--text-main); border:1px solid #cbd5e1;" onclick="sendLoc()">📍 現在地をLINEで送る</button>
+        <a href="https://line.me/R/share?text=%E4%BB%8A%E3%81%8B%E3%82%89%E5%B8%B0%E3%82%8A%E3%81%BE%E3%81%99%EF%BC%81" class="btn-line">💬 今から帰る</a>
+        <button class="btn-line" style="background:#f8fafc; color:var(--text-main); border:1px solid #cbd5e1; cursor: pointer;" onclick="sendLoc()">📍 現在地をLINEで送る</button>
     </div>
 
     <div class="section-title title-alert">⚠️ 緊急・周辺検索</div>
     <div class="card" style="background:#fef2f2; border: 1px solid #fca5a5;">
-        <button onclick="findNearby('救急病院')" class="btn-emergency bg-red">🏥 近くの救急病院を検索</button>
-        <button onclick="findNearby('飲食店')" class="btn-emergency bg-orange">🍴 近くの飲食店を探す</button>
-        <div class="grid-2">
-            <a href="tel:110" class="btn-tool" style="background:#444; color:#fff;">🚓 警察 110</a>
-            <a href="tel:119" class="btn-tool" style="background:#444; color:#fff;">🚑 救急 119</a>
-        </div>
+        <a href="https://www.google.com/maps/search/?api=1&query=救急病院" class="btn-emergency bg-red">🏥 近くの救急病院</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=飲食店" class="btn-emergency bg-orange">🍴 近くの飲食店</a>
     </div>
 
 <script>
-    // ダークモード切替
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1' : '0');
     }
 
-    // Googleマップルート案内（公式API形式）
-    function nav(dest) {
-        window.location.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}&travelmode=transit`;
-    }
-
+    // 自由入力の検索だけはJSが必要だが、極力シンプルに
     function search() {
         const val = document.getElementById('customDest').value;
-        if (val) nav(val);
+        if (val) {
+            window.location.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(val) + "&travelmode=transit";
+        }
     }
 
-    // 周辺検索（救急病院・飲食店）
-    function findNearby(keyword) {
-        window.location.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(keyword)}`;
-    }
-
-    // 運勢AI（ChatGPT）
     function askFortune() {
-        const family = `
-        1.パパ(1969/12/15,AB型) 2.ママ(1972/8/24,A型) 3.あすか(2001/7/23,A型) 4.はるな(2004/5/10,AB型) 5.こうせい(2010/9/21,A型)
-        `;
-        const prompt = `今日(${new Date().toLocaleDateString()})の5人の運勢を占って。星座は正確に。各人にアドバイス,ランチ,カラー,洋服,心がけ,NG/ラッキーワードを出して。最後に全員の運勢と季節から今夜の献立候補を理由を添えて5つ提案して。縦長にならないよう出力形式を工夫して。データ:${family}`;
+        const family = "1.パパ(1969/12/15,AB) 2.ママ(1972/8/24,A) 3.あすか(2001/7/23,A) 4.はるな(2004/5/10,AB) 5.こうせい(2010/9/21,A)";
+        const prompt = `今日(${new Date().toLocaleDateString()})の5人の運勢を占って。各人にアドバイス,ランチを出して。最後に全員の運勢と季節から今夜の献立候補を理由を添えて5つ提案して。データ:${family}`;
         window.open("https://chatgpt.com/?q=" + encodeURIComponent(prompt), "_blank");
-    }
-
-    // バス案内
-    function openBus(type) {
-        let s, g;
-        if(type===1){s="00021091";g="00021109"} else if(type===2){s="00021109";g="00021091"}
-        else if(type===3){s="00021091";g="00021013"} else {s="00021013";g="00021091"}
-        window.location.href = `https://transfer.navitime.biz/5931bus/smart/location/BusLocationResult?startId=${s}&goalId=${g}`;
-    }
-
-    // LINE連携
-    function sendLine(txt) {
-        window.location.href = "https://line.me/R/share?text=" + encodeURIComponent(txt);
     }
 
     function sendLoc() {
         if (!navigator.geolocation) return alert("GPS非対応");
         navigator.geolocation.getCurrentPosition(p => {
             const url = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-            sendLine("現在地はここです：\n" + url);
-        }, () => alert("位置情報を許可してください"));
+            window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("現在地：\n" + url);
+        });
     }
 
-    // 初期化（ダークモード・現在地マップ）
     window.onload = () => {
         if (localStorage.getItem('darkMode') === '1') document.body.classList.add('dark-mode');
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(p => {
-                const ifr = document.getElementById('map-iframe');
-                ifr.src = `https://maps.google.co.jp/maps?output=embed&q=${p.coords.latitude},${p.coords.longitude}&z=15`;
-                document.getElementById('map-loading').style.display = 'none';
-                ifr.style.display = 'block';
-            });
-        }
     };
 </script>
 </body>
