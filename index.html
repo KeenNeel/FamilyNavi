@@ -266,16 +266,17 @@
 
         let url = "";
 
+        // ★修正点：スマホからでも開けるように、/pc/ を /smart/ に変更しました
         if (routeType === 1) {
-            url = `https://transfer.navitime.biz/5931bus/pc/transfer/TransferSearchSelect?orvNode=00021091.%E8%8A%B1%E6%9C%88&orvName=&dnvNode=00021109.%E6%B5%A6%E5%92%8C%E9%A7%85%E6%9D%B1%E5%8F%A3&dnvName=&month=${yyyy}%2F${m}&day=${dd}&hour=${h}&minute=${minStr}&basis=1&sort=0&wspeed=slow&method=2`;
+            url = `https://transfer.navitime.biz/5931bus/smart/transfer/TransferSearchSelect?orvNode=00021091.%E8%8A%B1%E6%9C%88&orvName=&dnvNode=00021109.%E6%B5%A6%E5%92%8C%E9%A7%85%E6%9D%B1%E5%8F%A3&dnvName=&month=${yyyy}%2F${m}&day=${dd}&hour=${h}&minute=${minStr}&basis=1&sort=0&wspeed=slow&method=2`;
         } else if (routeType === 2) {
             const dateStr = `${yyyy}${mm}${dd}${hh}${minStr}`;
-            url = `https://transfer.navitime.biz/5931bus/pc/extif/TransferIF?orvName=%E6%B5%A6%E5%92%8C%E9%A7%85%E6%9D%B1%E5%8F%A3&dnvName=%E8%8A%B1%E6%9C%88&date=${dateStr}&basis=1&sort=0&wSpeed=slow`;
+            url = `https://transfer.navitime.biz/5931bus/smart/extif/TransferIF?orvName=%E6%B5%A6%E5%92%8C%E9%A7%85%E6%9D%B1%E5%8F%A3&dnvName=%E8%8A%B1%E6%9C%88&date=${dateStr}&basis=1&sort=0&wSpeed=slow`;
         } else if (routeType === 3) {
             const dateStr = `${yyyy}${mm}${dd}${hh}${minStr}`;
-            url = `https://transfer.navitime.biz/5931bus/pc/extif/TransferIF?orvName=%E8%8A%B1%E6%9C%88&dnvName=%E6%9D%B1%E6%B5%A6%E5%92%8C%E9%A7%85&date=${dateStr}&basis=1&sort=0&wSpeed=slow`;
+            url = `https://transfer.navitime.biz/5931bus/smart/extif/TransferIF?orvName=%E8%8A%B1%E6%9C%88&dnvName=%E6%9D%B1%E6%B5%A6%E5%92%8C%E9%A7%85&date=${dateStr}&basis=1&sort=0&wSpeed=slow`;
         } else if (routeType === 4) {
-            url = `https://transfer.navitime.biz/5931bus/pc/transfer/TransferSearchSelect?orvNode=00021013.%E6%9D%B1%E6%B5%A6%E5%92%8C%E9%A7%85&orvName=&dnvNode=00021091.%E8%8A%B1%E6%9C%88&dnvName=&month=${yyyy}%2F${m}&day=${dd}&hour=${h}&minute=${minStr}&basis=1&sort=0&wspeed=slow&method=2`;
+            url = `https://transfer.navitime.biz/5931bus/smart/transfer/TransferSearchSelect?orvNode=00021013.%E6%9D%B1%E6%B5%A6%E5%92%8C%E9%A7%85&orvName=&dnvNode=00021091.%E8%8A%B1%E6%9C%88&dnvName=&month=${yyyy}%2F${m}&day=${dd}&hour=${h}&minute=${minStr}&basis=1&sort=0&wspeed=slow&method=2`;
         }
 
         window.open(url, '_blank');
@@ -313,7 +314,6 @@
         );
     }
 
-    // アプリを開いた時に現在地の地図を表示する
     window.onload = function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -322,7 +322,6 @@
                     const lng = position.coords.longitude;
                     const iframe = document.getElementById('map-iframe');
                     const loading = document.getElementById('map-loading');
-                    // 取得した緯度経度を使ってGoogleマップを埋め込み表示
                     iframe.src = `https://maps.google.co.jp/maps?output=embed&q=${lat},${lng}&z=16`;
                     loading.style.display = 'none';
                     iframe.style.display = 'block';
