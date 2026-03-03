@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Family Navi 4.0</title>
+    <title>Smart Family Navi 5.0</title>
     <style>
         :root { 
             --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #334155; 
@@ -64,7 +64,7 @@
 <body>
 
     <div class="header">
-        <h1>Smart Family Navi</h1>
+        <h1>Smart Family Navi 5.0</h1>
         <button onclick="toggleDarkMode()" style="position: absolute; top: 15px; right: 10px; background: none; border: none; font-size: 24px;">🌓</button>
     </div>
 
@@ -78,20 +78,20 @@
     </div>
 
     <div class="section-title">現在地マップ</div>
-    <div class="card" style="padding: 0; overflow: hidden; height: 200px; position: relative;">
+    <div class="card" style="padding: 0; overflow: hidden; height: 180px; position: relative;">
         <div id="map-msg" style="position:absolute; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#eee; z-index:1; font-size:12px;">📍 位置情報を取得中...</div>
-        <iframe id="map-frame" width="100%" height="200" frameborder="0" style="border:0; z-index:2; position:relative; display:none;"></iframe>
+        <iframe id="map-frame" width="100%" height="180" frameborder="0" style="border:0; z-index:2; position:relative; display:none;"></iframe>
     </div>
 
     <div class="section-title">ルート案内 (公共交通)</div>
     <div class="card">
         <div class="grid-2">
-            <a href="https://www.google.com/maps/dir/?api=1&destination=自宅&travelmode=transit" class="btn-dest bg-main">🏠 自宅へ</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都小平市津田町2-1-1&travelmode=transit" class="btn-dest bg-sub1">🏫 はるな大学</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都港区港南4-5-7&travelmode=transit" class="btn-dest bg-sub1">🏫 明日香大学</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都江東区越中島2-2-8&travelmode=transit" class="btn-dest bg-sub2">🛏️ 明日香寮</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=34.491866,134.861292&travelmode=transit" class="btn-dest bg-sub2">🏡 淡路島実家</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都千代田区霞が関3-2-1&travelmode=transit" class="btn-dest bg-main">🏢 パパ会社</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=自宅住所をここに入れる&travelmode=transit" class="btn-dest bg-main">🏠 自宅へ</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=津田塾大学+小平キャンパス&travelmode=transit" class="btn-dest bg-sub1">🏫 はるな大学</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=東京海洋大学+品川キャンパス&travelmode=transit" class="btn-dest bg-sub1">🏫 明日香大学</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=35.6663,139.7923&travelmode=transit" class="btn-dest bg-sub2">🛏️ 明日香寮</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=34.3467,134.8917&travelmode=transit" class="btn-dest bg-sub2">🏡 淡路島実家</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=霞が関コモンゲート西館&travelmode=transit" class="btn-dest bg-main">🏢 パパ会社</a>
         </div>
         <div class="search-box" style="display:flex; gap:8px; margin-top:15px;">
             <input type="search" id="customDest" class="input-dest" placeholder="駅名・場所を入力">
@@ -140,14 +140,14 @@
 
     function askFortune() {
         const family = "1.パパ(1969/12/15,AB) 2.ママ(1972/8/24,A) 3.あすか(2001/7/23,A) 4.はるな(2004/5/10,AB) 5.こうせい(2010/9/21,A)";
-        const prompt = `今日(${new Date().toLocaleDateString()})の5人の運勢を占って。星座は正確に。各人にアドバイス,ランチ,ラッキーカラー,洋服,心がけ,NGワードを出して。最後に全員の運勢と季節から今夜の献立候補を理由を添えて5つ提案して。データ:${family}`;
+        const prompt = `今日(${new Date().toLocaleDateString()})の5人の運勢を占って。星座は正確に。各人にアドバイス,ランチ,カラー,洋服,心がけ,NGワードを出して。最後に全員の運勢と季節から今夜の献立候補を理由を添えて5つ提案して。データ:${family}`;
         window.open("https://chatgpt.com/?q=" + encodeURIComponent(prompt), "_blank");
     }
 
     function sendLoc() {
         if (!navigator.geolocation) return alert("GPSを許可してください");
         navigator.geolocation.getCurrentPosition(p => {
-            const url = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+            const url = `https://www.google.com/maps/search/?api=1&query=${p.coords.latitude},${p.coords.longitude}`;
             window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("現在地はここです：\n" + url);
         });
     }
