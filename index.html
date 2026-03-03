@@ -235,8 +235,8 @@
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1' : '0');
     }
 
+    // 修正済み：Googleマップを確実に開くための新しいURL形式
     function navTo(dest) {
-        // 特殊記号を使わない安全な書き方に修正
         var url = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(dest) + "&travelmode=transit";
         window.location.href = url;
     }
