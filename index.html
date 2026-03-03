@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Family Navi 3.1</title>
+    <title>Smart Family Navi 3.3</title>
     <style>
         :root { 
             --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #334155; 
@@ -15,7 +15,7 @@
             --primary-blue: #60a5fa; --secondary-gray: #9ca3af;
         }
         body { 
-            margin: 0; font-family: "Helvetica Neue", Arial, sans-serif; 
+            margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
             background: var(--bg-color); color: var(--text-main); 
             padding: 15px 15px 80px 15px; transition: background-color 0.3s;
         }
@@ -25,17 +25,16 @@
             font-size: 14px; font-weight: bold; color: var(--secondary-gray); 
             margin: 25px 0 10px 5px; border-left: 4px solid var(--primary-blue); padding-left: 10px; 
         }
+        .title-alert { color: var(--alert-red); border-left-color: var(--alert-red); }
         .card { 
             background: var(--card-bg); border-radius: 12px; padding: 18px; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #e2e8f0; 
         }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        
-        /* リンクをボタンに見せるスタイル */
         .btn-dest { 
             display: flex; align-items: center; justify-content: center; height: 55px;
-            font-size: 13px; font-weight: bold; color: white; border-radius: 8px; 
-            text-decoration: none; text-align: center; line-height: 1.2;
+            font-size: 13px; font-weight: bold; color: white; border: none; 
+            border-radius: 8px; cursor: pointer; text-decoration: none; text-align: center;
         }
         .bg-main { background: linear-gradient(135deg, #1e40af, #3b82f6); }
         .bg-sub1 { background: linear-gradient(135deg, #475569, #64748b); }
@@ -44,12 +43,12 @@
         .search-box { display: flex; gap: 8px; margin-top: 15px; }
         .input-dest { 
             flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px;
-            background: var(--card-bg); color: var(--text-main);
+            background: var(--card-bg); color: var(--text-main); -webkit-appearance: none;
         }
         .btn-line { 
-            display: block; width: 100%; padding: 16px; background: var(--line-green); color: white; 
+            width: 100%; padding: 16px; background: var(--line-green); color: white; 
             border: none; border-radius: 8px; margin-bottom: 12px; font-size: 15px; font-weight: bold;
-            text-decoration: none; text-align: center; box-sizing: border-box;
+            display: block; text-decoration: none; text-align: center; box-sizing: border-box;
         }
         .btn-emergency { 
             display: flex; align-items: center; justify-content: center; width: 100%; 
@@ -58,6 +57,11 @@
         }
         .bg-red { background: #dc2626; }
         .bg-orange { background: #ea580c; }
+        .btn-tool { 
+            display: flex; align-items: center; justify-content: center; text-decoration: none; 
+            border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 600; 
+            padding: 12px 2px; color: var(--text-main); background: #f8fafc; text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -67,37 +71,57 @@
         <button onclick="toggleDarkMode()" style="position: absolute; top: 15px; right: 10px; background: none; border: none; font-size: 24px;">🌓</button>
     </div>
 
+    <div class="section-title">現在地マップ</div>
+    <div class="card" style="padding: 0; overflow: hidden; height: 200px; position: relative;">
+        <div id="map-msg" style="position:absolute; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#eee; z-index:1; font-size:12px;">📍 位置情報を取得中...</div>
+        <iframe id="map-frame" width="100%" height="200" frameborder="0" style="border:0; z-index:2; position:relative; display:none;"></iframe>
+    </div>
+
     <div class="section-title">ルート案内 (公共交通)</div>
     <div class="card">
         <div class="grid-2">
-            <a href="https://www.google.com/maps/dir/?api=1&destination=自宅&travelmode=transit" class="btn-dest bg-main">🏠 自宅へ</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都小平市津田町2-1-1&travelmode=transit" class="btn-dest bg-sub1">🏫 はるな大学</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都港区港南4-5-7&travelmode=transit" class="btn-dest bg-sub1">🏫 明日香大学</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都江東区越中島2-2-8&travelmode=transit" class="btn-dest bg-sub2">🛏️ 明日香寮</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=34.491866,134.861292&travelmode=transit" class="btn-dest bg-sub2">🏡 淡路島実家</a>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=東京都千代田区霞が関3-2-1&travelmode=transit" class="btn-dest bg-main">🏢 パパ会社</a>
+            <button class="btn-dest bg-main" onclick="nav('自宅')">🏠 自宅へ</button>
+            <button class="btn-dest bg-sub1" onclick="nav('東京都小平市津田町2-1-1')">🏫 はるな大学</button>
+            <button class="btn-dest bg-sub1" onclick="nav('東京都港区港南4-5-7')">🏫 明日香大学</button>
+            <button class="btn-dest bg-sub2" onclick="nav('東京都江東区越中島2-2-8')">🛏️ 明日香寮</button>
+            <button class="btn-dest bg-sub2" onclick="nav('34.491866,134.861292')">🏡 淡路島実家</button>
+            <button class="btn-dest bg-main" onclick="nav('東京都千代田区霞が関3-2-1')">🏢 パパ会社</button>
         </div>
         <div class="search-box">
-            <input type="text" id="customDest" class="input-dest" placeholder="駅名・場所を入力">
+            <input type="search" id="customDest" class="input-dest" placeholder="駅名・場所を入力">
             <button style="background: var(--primary-blue); color: white; border: none; border-radius: 8px; padding: 0 15px; font-weight: bold;" onclick="search()">Go</button>
         </div>
     </div>
 
-    <div class="section-title">家族全員の運勢 ＆ 今夜の献立</div>
+    <div class="section-title">家族の運勢 ＆ 今夜の献立</div>
     <div class="card" style="border: 2px solid #e2e8f0; background: linear-gradient(to bottom, #ffffff, #f8fafc);">
-        <button onclick="askFortune()" class="btn-line" style="background: linear-gradient(135deg, #6366f1, #a855f7); margin-bottom: 0; cursor: pointer;">✨ 5人の運勢と献立を聞く</button>
+        <button onclick="askFortune()" class="btn-line" style="background: linear-gradient(135deg, #6366f1, #a855f7); margin-bottom: 0;">✨ 5人の運勢と献立を聞く</button>
     </div>
 
-    <div class="section-title">連絡</div>
+    <div class="section-title">バス運行状況</div>
     <div class="card">
-        <a href="https://line.me/R/share?text=%E4%BB%8A%E3%81%8B%E3%82%89%E5%B8%B0%E3%82%8A%E3%81%BE%E3%81%99%EF%BC%81" class="btn-line">💬 今から帰る</a>
-        <button class="btn-line" style="background:#f8fafc; color:var(--text-main); border:1px solid #cbd5e1; cursor: pointer;" onclick="sendLoc()">📍 現在地をLINEで送る</button>
+        <div class="grid-2">
+            <a href="https://transfer.navitime.biz/5931bus/smart/location/BusLocationResult?startId=00021091&goalId=00021109" class="btn-tool">花月➡浦和駅</a>
+            <a href="https://transfer.navitime.biz/5931bus/smart/location/BusLocationResult?startId=00021109&goalId=00021091" class="btn-tool">浦和駅➡花月</a>
+            <a href="https://transfer.navitime.biz/5931bus/smart/location/BusLocationResult?startId=00021091&goalId=00021013" class="btn-tool">花月➡東浦和</a>
+            <a href="https://transfer.navitime.biz/5931bus/smart/location/BusLocationResult?startId=00021013&goalId=00021091" class="btn-tool">東浦和➡花月</a>
+        </div>
+    </div>
+
+    <div class="section-title">LINE連絡</div>
+    <div class="card">
+        <a href="https://line.me/R/share?text=%E4%BB%8A%E3%81%8B%E3%82%89%E5%B8%B0%E3%82%8A%E3%81%BE%E3%81%99%EF%BC%81" class="btn-line">💬 今から帰ります！</a>
+        <button class="btn-line" style="background:#f8fafc; color:var(--text-main); border:1px solid #cbd5e1;" onclick="sendLoc()">📍 現在地をLINEで送る</button>
     </div>
 
     <div class="section-title title-alert">⚠️ 緊急・周辺検索</div>
-    <div class="card" style="background:#fef2f2; border: 1px solid #fca5a5;">
-        <a href="https://www.google.com/maps/search/?api=1&query=救急病院" class="btn-emergency bg-red">🏥 近くの救急病院</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=飲食店" class="btn-emergency bg-orange">🍴 近くの飲食店</a>
+    <div class="card" style="background:#fef2f2;">
+        <button onclick="findNearby('救急病院')" class="btn-emergency bg-red">🏥 近くの救急病院</button>
+        <button onclick="findNearby('飲食店')" class="btn-emergency bg-orange">🍴 近くの飲食店</button>
+        <div class="grid-2">
+            <a href="tel:110" class="btn-tool" style="background:#444; color:#fff;">🚓 警察 110</a>
+            <a href="tel:119" class="btn-tool" style="background:#444; color:#fff;">🚑 救急 119</a>
+        </div>
     </div>
 
 <script>
@@ -106,30 +130,45 @@
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1' : '0');
     }
 
-    // 自由入力の検索だけはJSが必要だが、極力シンプルに
+    // ルート案内 (iPhone/Android両対応のURLスキーム)
+    function nav(dest) {
+        // https://www.google.com/maps/dir/?api=1&destination= 形式が最も安定
+        window.location.href = `https://www.google.com/maps/dir/?api=1&destination={encodeURIComponent(dest)}&travelmode=transit`;
+    }
+
     function search() {
         const val = document.getElementById('customDest').value;
-        if (val) {
-            window.location.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(val) + "&travelmode=transit";
-        }
+        if (val) nav(val);
+    }
+
+    function findNearby(keyword) {
+        window.location.href = `https://www.google.com/maps/search/?api=1&query={encodeURIComponent(keyword)}`;
     }
 
     function askFortune() {
         const family = "1.パパ(1969/12/15,AB) 2.ママ(1972/8/24,A) 3.あすか(2001/7/23,A) 4.はるな(2004/5/10,AB) 5.こうせい(2010/9/21,A)";
-        const prompt = `今日(${new Date().toLocaleDateString()})の5人の運勢を占って。各人にアドバイス,ランチを出して。最後に全員の運勢と季節から今夜の献立候補を理由を添えて5つ提案して。データ:${family}`;
+        const prompt = `今日(${new Date().toLocaleDateString()})の5人の運勢を占って。星座は正確に。各人にアドバイス,ランチ,カラー,心がけ,NG/ラッキーワードを出して。最後に全員の運勢と季節から今夜の献立候補を理由を添えて5つ提案して。データ:${family}`;
         window.open("https://chatgpt.com/?q=" + encodeURIComponent(prompt), "_blank");
     }
 
     function sendLoc() {
-        if (!navigator.geolocation) return alert("GPS非対応");
+        if (!navigator.geolocation) return alert("GPSを許可してください");
         navigator.geolocation.getCurrentPosition(p => {
             const url = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-            window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("現在地：\n" + url);
+            window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("現在地はここです：\n" + url);
         });
     }
 
     window.onload = () => {
         if (localStorage.getItem('darkMode') === '1') document.body.classList.add('dark-mode');
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(p => {
+                const frame = document.getElementById('map-frame');
+                frame.src = `https://maps.google.co.jp/maps?output=embed&q=${p.coords.latitude},${p.coords.longitude}&z=15&hl=ja`;
+                frame.style.display = 'block';
+                document.getElementById('map-msg').style.display = 'none';
+            });
+        }
     };
 </script>
 </body>
