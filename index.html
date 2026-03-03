@@ -153,6 +153,44 @@
         </div>
     </div>
 
+<div class="section-title">家族全員の今日の運勢</div>
+<div class="card" style="border: 2px solid #e2e8f0; background: linear-gradient(to bottom, #ffffff, #f8fafc);">
+    <p style="font-size: 12px; color: var(--secondary-gray); text-align: center; margin-bottom: 15px;">
+        家族5人の誕生日と血液型に基づいた<br>今日の運勢とおすすめ夕食をAIが一括で占います。ChatGPTにプロンプトを投げるので、実行ボタンを押してください。
+    </p>
+    
+    <a id="fortune-all-btn" href="#" target="_blank" class="btn-line" style="background: linear-gradient(135deg, #6366f1, #a855f7); text-decoration: none; display: flex; align-items: center; justify-content: center;">
+        ✨ 今日の家族5人の運勢をChatGPTにまとめて聞く
+    </a>
+    
+    <div style="margin-top: 15px; font-size: 11px; color: var(--secondary-gray); line-height: 1.4;">
+        ※ChatGPTが立ち上がり、パパ・ママ・はるな・あすか・末っ子の運勢とラッキーアイテムを一覧で表示します。
+    </div>
+</div>
+
+<script>
+    // 🎂 家族全員のデータ（ここをご家族に合わせて修正してください）
+    const familyProfiles = `
+    1. パパ (1969年12月15日生まれ、AB型)
+    2. ママ (1972年8月24日生まれ、A)
+    4. あすか (2001年7月23日生まれ、A型)
+    3. はるな (2004年5月10日生まれ、AB型)
+    4. こうせい (2010年9月21日生まれ、A型)
+    `;
+
+    // ChatGPTへの依頼文（プロンプト）
+    const fortunePrompt = encodeURIComponent(
+        `以下の家族5人について、今日（${new Date().toLocaleDateString()}）の運勢を占ってください。理由や出展リンクもお願い。星座は正確に計算してください。よく間違っています。星座算定の根拠を最後に表示してください。
+        各メンバーに対して「今日の運勢」「おすすめランチ」「おすすめディナー」「おすすめカラー」「おすすめ洋服」「おすすめコスメ」「おすすめ心がけ」「NGワード」「ラッキーワード」を出してください。そして最後に皆の運勢から見た「今日のディナー　運勢と　季節を考慮」の候補を理由を添えて５つを出力してください。縦長にならないように出力形式は工夫してください。
+        
+        家族データ：
+        ${familyProfiles}`
+    );
+
+    // ボタンのリンク先を設定
+    document.getElementById('fortune-all-btn').href = "https://chatgpt.com/?q=" + fortunePrompt;
+</script>
+
     <div class="section-title">周辺検索</div>
     <div class="card">
         <a href="https://www.google.com/maps/search/?api=1&query=飲食店" target="_blank" class="btn-map" style="border-color: #ea580c; color: #ea580c; background: #fff7ed; text-decoration: none;">🍴 近くの飲食店をマップで探す</a>
