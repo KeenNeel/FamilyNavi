@@ -1,340 +1,349 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Family Navi 6.4</title>
-    <style>
-        /* カラーパレット設定 */
-        :root { 
-            --bg-color: #f1f5f9; 
-            --card-bg: #ffffff; 
-            --text-main: #334155; 
-            --primary-blue: #1e40af; 
-            --secondary-gray: #64748b;
-            --line-green: #06C755; 
-            --alert-red: #dc2626; 
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Smart Family Navi 6.4</title>
+<style>
+/* カラーパレット設定 */
+:root { 
+--bg-color: #f1f5f9; 
+--card-bg: #ffffff; 
+--text-main: #334155; 
+--primary-blue: #1e40af; 
+--secondary-gray: #64748b;
+--line-green: #06C755; 
+--alert-red: #dc2626; 
+}
 
-        /* ダークモード設定 */
-        body.dark-mode {
-            --bg-color: #121212; 
-            --card-bg: #1e1e1e; 
-            --text-main: #e0e0e0; 
-            --primary-blue: #60a5fa; 
-            --secondary-gray: #9ca3af;
-            --line-green: #05a547;
-            --alert-red: #ef4444;
-        }
+/* ダークモード設定 */
+body.dark-mode {
+--bg-color: #121212; 
+--card-bg: #1e1e1e; 
+--text-main: #e0e0e0; 
+--primary-blue: #60a5fa; 
+--secondary-gray: #9ca3af;
+--line-green: #05a547;
+--alert-red: #ef4444;
+}
 
-        body { 
-            margin: 0; 
-            font-family: "Helvetica Neue", Arial, sans-serif; 
-            background: var(--bg-color); 
-            color: var(--text-main); 
-            padding: 15px 15px 60px 15px; 
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        .header { text-align: center; padding: 20px 0 15px 0; position: relative; }
-        .header h1 { font-size: 22px; color: var(--primary-blue); margin: 0; font-weight: 800; letter-spacing: 1px; }
-        .header p { font-size: 12px; color: var(--secondary-gray); margin-top: 5px; }
-        
-        .section-title { 
-            font-size: 14px; font-weight: bold; color: var(--secondary-gray); 
-            margin: 25px 0 10px 5px; border-left: 4px solid var(--primary-blue); padding-left: 10px; 
-        }
-        .title-alert { color: var(--alert-red); border-left-color: var(--alert-red); }
-        
-        .card { 
-            background: var(--card-bg); border-radius: 12px; padding: 20px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #e2e8f0; 
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        
-        body.dark-mode .card { border-color: #333333; }
-        
-        .btn-dest { 
-            display: flex; align-items: center; justify-content: center;
-            width: 100%; padding: 15px 5px; font-size: 13px; font-weight: bold; 
-            color: white; border: none; border-radius: 8px; cursor: pointer; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: opacity 0.2s; text-align: center;
-        }
-        .bg-main { background: linear-gradient(135deg, #1e40af, #3b82f6); }
-        .bg-sub1 { background: linear-gradient(135deg, #475569, #64748b); }
-        .bg-sub2 { background: linear-gradient(135deg, #0f766e, #14b8a6); }
-        
-        .search-box { display: flex; gap: 10px; margin-top: 15px; }
-        .input-dest { 
-            flex: 1; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; 
-            font-size: 16px; outline: none; color: var(--text-main); 
-            background: var(--card-bg); -webkit-appearance: none;
-        }
-        
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        
-        .btn-tool { 
-            display: flex; align-items: center; justify-content: center; text-decoration: none; 
-            border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 600; 
-            padding: 12px 2px; color: var(--text-main); background: #f8fafc; text-align: center; cursor: pointer;
-        }
-        .btn-map { 
-            display: block; width: 100%; padding: 14px; margin-bottom: 8px; font-size: 13px; 
-            font-weight: bold; text-decoration: none; border-radius: 8px; text-align: center; 
-            border: 1px solid #cbd5e1; background: #f1f5f9; color: var(--text-main); box-sizing: border-box; cursor: pointer;
-        }
-        
-        .btn-worry { 
-            display: block; width: 100%; padding: 14px 15px; margin-bottom: 10px; 
-            background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; 
-            font-size: 13px; font-weight: bold; color: var(--text-main); text-decoration: none; box-sizing: border-box; 
-        }
-        
-        body.dark-mode .btn-tool, 
-        body.dark-mode .btn-map, 
-        body.dark-mode .btn-worry,
-        body.dark-mode .weather-box {
-            background: #2a2a2a !important; border-color: #444444 !important; color: #e0e0e0;
-        }
-        
-        .btn-line { 
-            width: 100%; padding: 16px; background: var(--line-green); color: white; 
-            border: none; border-radius: 8px; margin-bottom: 12px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; display: block; text-decoration: none; box-sizing: border-box;
-        }
-        
-        .btn-emergency { 
-            display: flex; align-items: center; justify-content: center; width: 100%; 
-            padding: 16px; margin-bottom: 10px; border-radius: 8px; font-size: 15px; 
-            font-weight: bold; color: white; text-decoration: none; border: none; box-sizing: border-box; cursor: pointer;
-        }
-        .bg-red { background: #dc2626; }
-        .bg-orange { background: #ea580c; }
+body { 
+margin: 0; 
+font-family: "Helvetica Neue", Arial, sans-serif; 
+background: var(--bg-color); 
+color: var(--text-main); 
+padding: 15px 15px 60px 15px; 
+transition: background-color 0.3s, color 0.3s;
+}
 
-        /* 天気予報用スタイル */
-        .weather-container {
-            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px;
-        }
-        .weather-box {
-            flex: 0 0 90px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; 
-            padding: 10px 5px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .weather-name { font-size: 11px; font-weight: bold; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .weather-icon { font-size: 24px; margin-bottom: 2px; }
-        .weather-temp { font-size: 13px; font-weight: bold; color: var(--primary-blue); }
-        .weather-pop { font-size: 10px; color: var(--secondary-gray); margin-top: 2px; }
-    </style>
+.header { text-align: center; padding: 20px 0 15px 0; position: relative; }
+.header h1 { font-size: 22px; color: var(--primary-blue); margin: 0; font-weight: 800; letter-spacing: 1px; }
+.header p { font-size: 12px; color: var(--secondary-gray); margin-top: 5px; }
+
+.section-title { 
+font-size: 14px; font-weight: bold; color: var(--secondary-gray); 
+margin: 25px 0 10px 5px; border-left: 4px solid var(--primary-blue); padding-left: 10px; 
+}
+.title-alert { color: var(--alert-red); border-left-color: var(--alert-red); }
+
+.card { 
+background: var(--card-bg); border-radius: 12px; padding: 20px; 
+box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #e2e8f0; 
+transition: background-color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode .card { border-color: #333333; }
+
+.btn-dest { 
+display: flex; align-items: center; justify-content: center;
+width: 100%; padding: 15px 5px; font-size: 13px; font-weight: bold; 
+color: white; border: none; border-radius: 8px; cursor: pointer; 
+box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: opacity 0.2s; text-align: center;
+}
+.bg-main { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+.bg-sub1 { background: linear-gradient(135deg, #475569, #64748b); }
+.bg-sub2 { background: linear-gradient(135deg, #0f766e, #14b8a6); }
+
+.search-box { display: flex; gap: 10px; margin-top: 15px; }
+.input-dest { 
+flex: 1; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; 
+font-size: 16px; outline: none; color: var(--text-main); 
+background: var(--card-bg); -webkit-appearance: none;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.btn-tool { 
+display: flex; align-items: center; justify-content: center; text-decoration: none; 
+border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 600; 
+padding: 12px 2px; color: var(--text-main); background: #f8fafc; text-align: center; cursor: pointer;
+}
+.btn-map { 
+display: block; width: 100%; padding: 14px; margin-bottom: 8px; font-size: 13px; 
+font-weight: bold; text-decoration: none; border-radius: 8px; text-align: center; 
+border: 1px solid #cbd5e1; background: #f1f5f9; color: var(--text-main); box-sizing: border-box; cursor: pointer;
+}
+
+.btn-worry { 
+display: block; width: 100%; padding: 14px 15px; margin-bottom: 10px; 
+background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; 
+font-size: 13px; font-weight: bold; color: var(--text-main); text-decoration: none; box-sizing: border-box; 
+}
+
+body.dark-mode .btn-tool, 
+body.dark-mode .btn-map, 
+body.dark-mode .btn-worry,
+body.dark-mode .weather-box {
+background: #2a2a2a !important; border-color: #444444 !important; color: #e0e0e0;
+}
+
+.btn-line { 
+width: 100%; padding: 16px; background: var(--line-green); color: white; 
+border: none; border-radius: 8px; margin-bottom: 12px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; display: block; text-decoration: none; box-sizing: border-box;
+}
+
+.btn-emergency { 
+display: flex; align-items: center; justify-content: center; width: 100%; 
+padding: 16px; margin-bottom: 10px; border-radius: 8px; font-size: 15px; 
+font-weight: bold; color: white; text-decoration: none; border: none; box-sizing: border-box; cursor: pointer;
+}
+.bg-red { background: #dc2626; }
+.bg-orange { background: #ea580c; }
+
+/* 天気予報用スタイル */
+.weather-container {
+display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px;
+}
+.weather-box {
+flex: 0 0 90px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; 
+padding: 10px 5px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.weather-name { font-size: 11px; font-weight: bold; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.weather-icon { font-size: 24px; margin-bottom: 2px; }
+.weather-temp { font-size: 13px; font-weight: bold; color: var(--primary-blue); }
+.weather-pop { font-size: 10px; color: var(--secondary-gray); margin-top: 2px; }
+</style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Smart Family Navi</h1>
-        <p>Location & Support Portal</p>
-        <button onclick="toggleDarkMode()" style="position: absolute; top: 15px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer; padding: 5px;">🌓</button>
-    </div>
+<div class="header">
+<h1>Smart Family Navi</h1>
+<p>Location & Support Portal</p>
+<button onclick="toggleDarkMode()" style="position: absolute; top: 15px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer; padding: 5px;">🌓</button>
+</div>
 
-    <div class="section-title">🌤️ 各地の今日の天気</div>
-    <div class="card" style="padding: 15px 15px 5px 15px;">
-        <div id="weather-wrapper" class="weather-container">
-            <div style="font-size:12px; color:var(--secondary-gray); width:100%; text-align:center;">天気を取得中...</div>
-        </div>
-    </div>
+<div class="section-title">🌤️ 各地の今日の天気</div>
+<div class="card" style="padding: 15px 15px 5px 15px;">
+<div id="weather-wrapper" class="weather-container">
+<div style="font-size:12px; color:var(--secondary-gray); width:100%; text-align:center;">天気を取得中...</div>
+</div>
+</div>
 
-    <div class="section-title">現在地マップ</div>
-    <div class="card" style="padding: 0; overflow: hidden; height: 250px;">
-        <div id="map-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--secondary-gray); font-size: 13px; font-weight: bold; text-align: center; padding: 0 10px;">
-            <span>📍 現在地を取得中...</span>
-        </div>
-        <iframe id="map-iframe" width="100%" height="250" frameborder="0" style="border:0; display:none;"></iframe>
-    </div>
+<div class="section-title">現在地マップ</div>
+<div class="card" style="padding: 0; overflow: hidden; height: 250px;">
+<div id="map-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--secondary-gray); font-size: 13px; font-weight: bold; text-align: center; padding: 0 10px;">
+<span>📍 現在地を取得中...</span>
+</div>
+<iframe id="map-iframe" width="100%" height="250" frameborder="0" style="border:0; display:none;"></iframe>
+</div>
 
-    <div class="section-title">ルート案内（乗換・徒歩）</div>
-    <div class="card">
-        <div class="grid-2">
-            <button class="btn-dest bg-main" onclick="navTo('自宅')">🏠 自宅へ帰る</button>
-            <button class="btn-dest bg-sub1" onclick="navTo('東京都小平市津田町2-1-1')">🏫 はるな大学 (津田塾)</button>
-            <button class="btn-dest bg-sub1" onclick="navTo('35.62760405927438, 139.74840433049252')">🏫 明日香大学</button>
-            <button class="btn-dest bg-sub2" onclick="navTo('東京都江東区越中島2-2-8')">🛏️ 明日香寮</button>
-            <button class="btn-dest bg-sub2" onclick="navTo('34.491866,134.861292')">🏡 淡路島実家</button>
-            <button class="btn-dest bg-sub1" onclick="navTo('〒550-0013 大阪府大阪市西区新町１丁目３３−８ Issビル')">🏫 明日香ISリアライズ</button>
-            <button class="btn-dest bg-main" onclick="navTo('東京都千代田区霞が関3-2-1')" style="grid-column: span 2;">🏢 パパ会社</button>
-        </div>
-        <div class="search-box">
-            <input type="text" id="customDest" class="input-dest" placeholder="施設名・住所を入力">
-            <button style="background: var(--primary-blue); color: white; border: none; border-radius: 8px; padding: 0 20px; font-weight: bold; cursor: pointer;" onclick="searchCustomDest()">出発</button>
-        </div>
-    </div>
+<div class="section-title">ルート案内（乗換・徒歩）</div>
+<div class="card">
+<div class="grid-2">
+<button class="btn-dest bg-main" onclick="navTo('自宅')">🏠 自宅へ帰る</button>
+<button class="btn-dest bg-sub1" onclick="navTo('東京都小平市津田町2-1-1')">🏫 はるな大学 (津田塾)</button>
+<button class="btn-dest bg-sub1" onclick="navTo('35.62760405927438, 139.74840433049252')">🏫 明日香大学</button>
+<button class="btn-dest bg-sub2" onclick="navTo('東京都江東区越中島2-2-8')">🛏️ 明日香寮</button>
+<button class="btn-dest bg-sub2" onclick="navTo('34.491866,134.861292')">🏡 淡路島実家</button>
+<button class="btn-dest bg-sub1" onclick="navTo('〒550-0013 大阪府大阪市西区新町１丁目３３−８ Issビル')">🏫 明日香ISリアライズ</button>
+<button class="btn-dest bg-main" onclick="navTo('東京都千代田区霞が関3-2-1')" style="grid-column: span 2;">🏢 パパ会社</button>
+</div>
+<div class="search-box">
+<input type="text" id="customDest" class="input-dest" placeholder="施設名・住所を入力">
+<button style="background: var(--primary-blue); color: white; border: none; border-radius: 8px; padding: 0 20px; font-weight: bold; cursor: pointer;" onclick="searchCustomDest()">出発</button>
+</div>
+</div>
 
-    <div class="section-title">バスのリアルタイム案内</div>
-    <div class="card">
-        <div class="grid-2">
-            <button onclick="openBusRoute(1)" class="btn-tool" style="border-color:#10b981; color:#047857; background:#ecfdf5; cursor: pointer;">花月 ➡ 浦和駅東口</button>
-            <button onclick="openBusRoute(2)" class="btn-tool" style="border-color:#10b981; color:#047857; background:#ecfdf5; cursor: pointer;">浦和駅東口 ➡ 花月</button>
-            <button onclick="openBusRoute(3)" class="btn-tool" style="border-color:#10b981; color:#047857; background:#ecfdf5; cursor: pointer;">花月 ➡ 東浦和駅</button>
-            <button onclick="openBusRoute(4)" class="btn-tool" style="border-color:#10b981; color:#047857; background:#ecfdf5; cursor: pointer;">東浦和駅 ➡ 花月</button>
-        </div>
-    </div>
+<div class="section-title">バスのリアルタイム案内</div>
+<div class="card">
+<div class="grid-2">
+<button onclick="openBusRoute(1)" class="btn-tool" style="border-color:#10b981; color:#047857; background:#ecfdf5; cursor: pointer;">花月 ➡ 浦和駅東口</button>
+<button onclick="openBusRoute(2)" class="btn-tool" style="border-color:#10b981; color:#047857; background:#ecfdf5; cursor: pointer;">浦和駅東口 ➡ 花月</button>
+<button onclick="openBusRoute(3)" class="btn-tool" style="border-color:#10b981; color:#047857; background:#ecfdf5; cursor: pointer;">花月 ➡ 東浦和駅</button>
+<button onclick="openBusRoute(4)" class="btn-tool" style="border-color:#10b981; color:#047857; background:#ecfdf5; cursor: pointer;">東浦和駅 ➡ 花月</button>
+</div>
+</div>
 
-    <div class="section-title">運行情報・タクシー</div>
-    <div class="card">
-        <a href="https://transit.yahoo.co.jp/diainfo/area/4" target="_blank" class="btn-map">🗺 首都圏 運行情報</a>
-        <a href="https://transit.yahoo.co.jp/diainfo/area/6" target="_blank" class="btn-map">🗺 関西 運行情報</a>
-        <div class="grid-2" style="margin-top:10px;">
-            <a href="https://go.goinc.jp/" target="_blank" class="btn-tool">🚕 GOタクシー</a>
-            <a href="https://m.uber.com/" target="_blank" class="btn-tool" style="background:#334155; color:#fff;">🚙 Uber</a>
-        </div>
-    </div>
+<div class="section-title">運行情報・タクシー</div>
+<div class="card">
+<a href="https://transit.yahoo.co.jp/diainfo/area/4" target="_blank" class="btn-map">🗺 首都圏 運行情報</a>
+<a href="https://transit.yahoo.co.jp/diainfo/area/6" target="_blank" class="btn-map">🗺 関西 運行情報</a>
+<div class="grid-2" style="margin-top:10px;">
+<a href="https://go.goinc.jp/" target="_blank" class="btn-tool">🚕 GOタクシー</a>
+<a href="https://m.uber.com/" target="_blank" class="btn-tool" style="background:#334155; color:#fff;">🚙 Uber</a>
+</div>
+</div>
 
-    <div class="section-title">連絡</div>
-    <div class="card" style="background:none; box-shadow:none; padding:0; border:none;">
-        <button class="btn-line" onclick="sendLine()">💬 LINEで「今から帰る」</button>
-        <button onclick="sendLocationLine()" style="width: 100%; padding: 16px; background: var(--card-bg); color: var(--text-main); border: 2px solid #cbd5e1; border-radius: 8px; font-weight: bold; cursor: pointer;">📍 位置情報をLINEで送る</button>
-    </div>
+<div class="section-title">連絡</div>
+<div class="card" style="background:none; box-shadow:none; padding:0; border:none;">
+<button class="btn-line" onclick="sendLine()">💬 LINEで「今から帰る」</button>
+<button onclick="sendLocationLine()" style="width: 100%; padding: 16px; background: var(--card-bg); color: var(--text-main); border: 2px solid #cbd5e1; border-radius: 8px; font-weight: bold; cursor: pointer;">📍 位置情報をLINEで送る</button>
+</div>
 
-    <div class="section-title">ChatGPTに今日の話題を聞く</div>
-    <div class="card">
-        <a href="https://chatgpt.com/?q=今日の主要ニュースをわかりやすくまとめて教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #2563eb;">🤖 今日の主要ニュースまとめ</a>
-        <a href="https://chatgpt.com/?q=Xで話題になっている最新トレンドやニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #000000;">🤖 X(Grok)風：最新トレンドを聞く</a>
-        <a href="https://chatgpt.com/?q=今日家族で話すのにふさわしい話題をいくつか教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #10a37f;">🤖 今日のおすすめの話題を聞く</a>
-        <a href="https://chatgpt.com/?q=会社員の間で話題になっているビジネスや雑談ネタを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 会社員向けの話題を聞く</a>
-        <a href="https://chatgpt.com/?q=大学生の間で流行っていることやニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 大学生向けの話題を聞く</a>
-        <a href="https://chatgpt.com/?q=高校生の間で流行っているSNSのトレンドやニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 高校生向けの話題を聞く</a>
-        <a href="https://chatgpt.com/?q=ジャニーズ系アイドルの最新情報をまとめて教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #0078d4;">🤖 アイドル最新情報を聞く</a>
-    </div>
+<div class="section-title">ChatGPTに今日の話題を聞く</div>
+<div class="card">
+<a href="https://chatgpt.com/?q=今日の主要ニュースをわかりやすくまとめて教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #2563eb;">🤖 今日の主要ニュースまとめ</a>
+<a href="https://chatgpt.com/?q=Xで話題になっている最新トレンドやニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #000000;">🤖 X(Grok)風：最新トレンドを聞く</a>
+<a href="https://chatgpt.com/?q=今日家族で話すのにふさわしい話題をいくつか教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #10a37f;">🤖 今日のおすすめの話題を聞く</a>
+<a href="https://chatgpt.com/?q=会社員の間で話題になっているビジネスや雑談ネタを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 会社員向けの話題を聞く</a>
+<a href="https://chatgpt.com/?q=大学生の間で流行っていることやニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 大学生向けの話題を聞く</a>
+<a href="https://chatgpt.com/?q=高校生の間で流行っているSNSのトレンドやニュースを教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #d97757;">🤖 高校生向けの話題を聞く</a>
+<a href="https://chatgpt.com/?q=ジャニーズ系アイドルの最新情報をまとめて教えて。" target="_blank" class="btn-worry" style="border-left: 4px solid #0078d4;">🤖 アイドル最新情報を聞く</a>
+</div>
 
-    <div class="section-title">周辺検索</div>
-    <div class="card">
-        <button onclick="searchNearby('飲食店')" class="btn-map" style="border-color: #ea580c; color: #ea580c; background: #fff7ed; cursor: pointer;">🍴 近くの飲食店をマップで探す</button>
-    </div>
+<div class="section-title">周辺検索</div>
+<div class="card">
+<button onclick="searchNearby('飲食店')" class="btn-map" style="border-color: #ea580c; color: #ea580c; background: #fff7ed; cursor: pointer;">🍴 近くの飲食店をマップで探す</button>
+</div>
 
-    <div class="section-title">家族全員の今日の運勢</div>
-    <div class="card" style="border: 2px solid #e2e8f0; background: linear-gradient(to bottom, #ffffff, #f8fafc);">
-        <p style="font-size: 12px; color: var(--secondary-gray); text-align: center; margin-bottom: 15px;">
-            家族5人の誕生日と血液型に基づいた<br>今日の運勢とおすすめ夕食をAIが一括で占います。
-        </p>
-        
-        <button onclick="askFortune()" class="btn-line" style="background: linear-gradient(135deg, #6366f1, #a855f7); margin-bottom: 0;">✨ 今日の家族5人の運勢をまとめて聞く</button>
-        
-        <div style="margin-top: 15px; font-size: 11px; color: var(--secondary-gray); line-height: 1.4;">
-            ※ChatGPTが立ち上がり、5人の詳細な運勢と、今夜の献立候補5つを提案します。
-        </div>
-    </div>
+<div class="section-title">家族全員の今日の運勢</div>
+<div class="card" style="border: 2px solid #e2e8f0; background: linear-gradient(to bottom, #ffffff, #f8fafc);">
+<p style="font-size: 12px; color: var(--secondary-gray); text-align: center; margin-bottom: 15px;">
+家族5人の誕生日と血液型に基づいた<br>今日の運勢とおすすめ夕食をAIが一括で占います。
+</p>
 
-    <div class="section-title title-alert">⚠️ 緊急連絡先</div>
-    <div class="card" style="border:2px solid #fca5a5; background:#fef2f2;">
-        <a href="tel:119" class="btn-emergency bg-red" style="font-size: 18px;">🚑 救急・消防 (119番)</a>
-        <a href="tel:110" class="btn-emergency bg-red" style="font-size: 18px; background:#444;">🚓 警察 (110番)</a>
-        <button onclick="searchNearby('救急病院')" class="btn-emergency bg-orange" style="margin-bottom: 0;">🏥 近くの救急病院を検索</button>
-    </div>
+<button onclick="askFortune()" class="btn-line" style="background: linear-gradient(135deg, #6366f1, #a855f7); margin-bottom: 0;">✨ 今日の家族5人の運勢をまとめて聞く</button>
+
+<div style="margin-top: 15px; font-size: 11px; color: var(--secondary-gray); line-height: 1.4;">
+※ChatGPTが立ち上がり、5人の詳細な運勢と、今夜の献立候補5つを提案します。
+</div>
+</div>
+
+<div class="section-title title-alert">⚠️ 緊急連絡先</div>
+<div class="card" style="border:2px solid #fca5a5; background:#fef2f2;">
+<a href="tel:119" class="btn-emergency bg-red" style="font-size: 18px;">🚑 救急・消防 (119番)</a>
+<a href="tel:110" class="btn-emergency bg-red" style="font-size: 18px; background:#444;">🚓 警察 (110番)</a>
+<button onclick="searchNearby('救急病院')" class="btn-emergency bg-orange" style="margin-bottom: 0;">🏥 近くの救急病院を検索</button>
+</div>
 
 <script>
-    // 🌙 ダークモード
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1' : '0');
-    }
+// 🌙 ダークモード
+function toggleDarkMode() {
+document.body.classList.toggle('dark-mode');
+localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1' : '0');
+}
 
-    // =========================================================================
-    // 🌤️ 天気予報の自動取得
-    // =========================================================================
-    async function loadWeather() {
-        const locations = [
-            { id: 'saitama', name: 'さいたま市緑区', lat: 35.88, lon: 139.68 },
-            { id: 'shinagawa', name: '東京都品川区', lat: 35.60, lon: 139.73 },
-            { id: 'kodaira', name: '東京都小平市', lat: 35.73, lon: 139.48 },
-            { id: 'osaka', name: '大阪市西区', lat: 34.67, lon: 135.48 },
-            { id: 'awaji', name: '兵庫県淡路市', lat: 34.43, lon: 134.90 }
-        ];
+// =========================================================================
+// 🌤️ 天気予報の自動取得
+// =========================================================================
+async function loadWeather() {
+const locations = [
+{ id: 'saitama', name: 'さいたま市緑区', lat: 35.88, lon: 139.68 },
+{ id: 'shinagawa', name: '東京都品川区', lat: 35.60, lon: 139.73 },
+{ id: 'kodaira', name: '東京都小平市', lat: 35.73, lon: 139.48 },
+{ id: 'osaka', name: '大阪市西区', lat: 34.67, lon: 135.48 },
+{ id: 'awaji', name: '兵庫県淡路市', lat: 34.43, lon: 134.90 }
+];
 
-        const wrapper = document.getElementById('weather-wrapper');
-        wrapper.innerHTML = ''; 
+const wrapper = document.getElementById('weather-wrapper');
+wrapper.innerHTML = ''; 
 
-        for (const loc of locations) {
-            try {
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,weather_code&daily=precipitation_probability_max&timezone=Asia%2FTokyo`;
-                const response = await fetch(url);
-                const data = await response.json();
+for (const loc of locations) {
+try {
+const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,weather_code&daily=precipitation_probability_max&timezone=Asia%2FTokyo`;
+const response = await fetch(url);
+const data = await response.json();
 
-                const temp = Math.round(data.current.temperature_2m); 
-                const code = data.current.weather_code; 
-                const pop = data.daily.precipitation_probability_max[0]; 
+const temp = Math.round(data.current.temperature_2m); 
+const code = data.current.weather_code; 
+const pop = data.daily.precipitation_probability_max[0]; 
 
-                let icon = "☀️"; 
-                if (code >= 1 && code <= 3) icon = "⛅"; 
-                if (code >= 45 && code <= 48) icon = "🌫️"; 
-                if (code >= 51 && code <= 67) icon = "☔"; 
-                if (code >= 71 && code <= 77) icon = "❄️"; 
-                if (code >= 80 && code <= 82) icon = "🌧️"; 
-                if (code >= 95) icon = "⚡"; 
+let icon = "☀️"; 
+if (code >= 1 && code <= 3) icon = "⛅"; 
+if (code >= 45 && code <= 48) icon = "🌫️"; 
+if (code >= 51 && code <= 67) icon = "☔"; 
+if (code >= 71 && code <= 77) icon = "❄️"; 
+if (code >= 80 && code <= 82) icon = "🌧️"; 
+if (code >= 95) icon = "⚡"; 
 
-                const box = document.createElement('div');
-                box.className = 'weather-box';
-                box.innerHTML = `
-                    <div class="weather-name">${loc.name}</div>
-                    <div class="weather-icon">${icon}</div>
-                    <div class="weather-temp">${temp}℃</div>
-                    <div class="weather-pop">降水 ${pop}%</div>
-                `;
-                wrapper.appendChild(box);
-            } catch (error) {
-                console.error("天気取得エラー:", error);
-            }
-        }
-    }
+const box = document.createElement('div');
+box.className = 'weather-box';
+box.innerHTML = `
+<div class="weather-name">${loc.name}</div>
+<div class="weather-icon">${icon}</div>
+<div class="weather-temp">${temp}℃</div>
+<div class="weather-pop">降水 ${pop}%</div>
+`;
+wrapper.appendChild(box);
+} catch (error) {
+console.error("天気取得エラー:", error);
+}
+}
+}
 
-    // =========================================================================
-    // 💡 URL自動書き換えブロック回避 ＆ 最短経路
-    // =========================================================================
-    var mapBase = "https://" + "www." + "google.com" + "/maps/";
+// =========================================================================
+// 💡 URL自動書き換えブロック回避 ＆ 最短経路
+// =========================================================================
+var mapBase = "https://" + "www." + "google.com" + "/maps/";
 
-    function navTo(dest) {
-        var url = mapBase + "dir/?api=1&travelmode=transit&destination=" + encodeURIComponent(dest);
-        window.location.href = url;
-    }
+function navTo(dest) {
+var url = mapBase + "dir/?api=1&travelmode=transit&destination=" + encodeURIComponent(dest);
+window.location.href = url;
+}
 
-    function searchCustomDest() {
-        var dest = document.getElementById('customDest').value;
-        if (dest) navTo(dest);
-    }
+function searchCustomDest() {
+var dest = document.getElementById('customDest').value;
+if (dest) navTo(dest);
+}
 
-    function searchNearby(keyword) {
-        var url = mapBase + "search/?api=1&query=" + encodeURIComponent(keyword);
-        window.location.href = url;
-    }
+function searchNearby(keyword) {
+var url = mapBase + "search/?api=1&query=" + encodeURIComponent(keyword);
+window.location.href = url;
+}
 
-    // =========================================================================
-    // バスのリアルタイム案内
-    // =========================================================================
-    function openBusRoute(routeType) {
-        var s = "", g = "";
-        if(routeType === 1){ s="00021091"; g="00021109"; }
-        else if(routeType === 2){ s="00021109"; g="00021091"; }
-        else if(routeType === 3){ s="00021091"; g="00021013"; }
-        else if(routeType === 4){ s="00021013"; g="00021091"; }
-        window.location.href = "https://transfer.navitime.biz/5931bus/smart/location/BusLocationResult?startId=" + s + "&goalId=" + g;
-    }
+// =========================================================================
+// バスのリアルタイム案内
+// =========================================================================
+function openBusRoute(routeType) {
+var s = "", g = "";
+if(routeType === 1){ s="00021091"; g="00021109"; }
+else if(routeType === 2){ s="00021109"; g="00021091"; }
+else if(routeType === 3){ s="00021091"; g="00021013"; }
+else if(routeType === 4){ s="00021013"; g="00021091"; }
+window.location.href = "https://transfer.navitime.biz/5931bus/smart/location/BusLocationResult?startId=" + s + "&goalId=" + g;
+}
 
-    // =========================================================================
-    // LINE連携
-    // =========================================================================
-    function sendLine() {
-        window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("今から帰ります！");
-    }
+// =========================================================================
+// LINE連携
+// =========================================================================
+function sendLine() {
+window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("今から帰ります！");
+}
 
-    function sendLocationLine() {
-        if (!navigator.geolocation) return alert("GPS未対応です");
-        navigator.geolocation.getCurrentPosition(function(p) {
-            var lat = p.coords.latitude;
-            var lng = p.coords.longitude;
-            var mapsUrl = mapBase + "search/?api=1&query=" + lat + "," + lng;
-            window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("現在の位置情報：\n" + mapsUrl);
-        });
-    }
+// 位置情報取得オプション（高精度化）
+const geoOptions = {
+enableHighAccuracy: true,
+timeout: 10000,
+maximumAge: 0
+};
 
-    // =========================================================================
-    // 家族運勢プロンプト (全要件盛り込み・URLエラー防止の最終完成版)
-    // =========================================================================
-    function askFortune() {
-        const prompt = `西洋占星術(プトレマイオス等)を基礎に以下を出力。
+function sendLocationLine() {
+if (!navigator.geolocation) return alert("GPS未対応です");
+navigator.geolocation.getCurrentPosition(function(p) {
+var lat = p.coords.latitude;
+var lng = p.coords.longitude;
+var mapsUrl = mapBase + "search/?api=1&query=" + lat + "," + lng;
+window.location.href = "https://line.me/R/share?text=" + encodeURIComponent("現在の位置情報：\n" + mapsUrl);
+}, function(e) {
+alert("位置情報の取得に失敗しました。設定を確認してください。");
+}, geoOptions);
+}
+
+// =========================================================================
+// 家族運勢プロンプト (全要件盛り込み・URLエラー防止の最終完成版)
+// =========================================================================
+function askFortune() {
+const prompt = `西洋占星術(プトレマイオス等)を基礎に以下を出力。
 
 【前提】
 日付:${new Date().toLocaleDateString()}
@@ -352,41 +361,43 @@
 ### 候補1：[メニュー名]
 * 理由：[選定理由]
 * 【簡単】[料理名A]
-  - 理由：[理由]
-  - リンク：https://cookpad.com/search/[料理名A]%20人気
+- 理由：[理由]
+- リンク：https://cookpad.com/search/[料理名A]%20人気
 * 【本格】[料理名B]
-  - 理由：[理由]
-  - リンク：https://cookpad.com/search/[料理名B]%20人気
+- 理由：[理由]
+- リンク：https://cookpad.com/search/[料理名B]%20人気
 * 【コスパ】[料理名C]
-  - 理由：[理由]
-  - リンク：https://cookpad.com/search/[料理名C]%20人気
+- 理由：[理由]
+- リンク：https://cookpad.com/search/[料理名C]%20人気
 （※候補5まで繰り返す。URLの[料理名]は提案料理名にする）`;
 
-        // ChatGPT画面へプロンプトを渡して直接展開
-        window.open("https://chatgpt.com/?q=" + encodeURIComponent(prompt), "_blank");
-    }
+// ChatGPT画面へプロンプトを渡して直接展開
+window.open("https://chatgpt.com/?q=" + encodeURIComponent(prompt), "_blank");
+}
 
-    // =========================================================================
-    // 初期化
-    // =========================================================================
-    window.onload = function() {
-        if (localStorage.getItem('darkMode') === '1') document.body.classList.add('dark-mode');
-        
-        // 天気の取得を実行
-        loadWeather();
+// =========================================================================
+// 初期化
+// =========================================================================
+window.onload = function() {
+if (localStorage.getItem('darkMode') === '1') document.body.classList.add('dark-mode');
 
-        // 現在地マップの取得
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(p) {
-                var lat = p.coords.latitude;
-                var lng = p.coords.longitude;
-                var ifr = document.getElementById('map-iframe');
-                ifr.src = "https://maps.google.co.jp/maps?output=embed&q=" + lat + "," + lng + "&z=16";
-                document.getElementById('map-loading').style.display = 'none';
-                ifr.style.display = 'block';
-            });
-        }
-    };
+// 天気の取得を実行
+loadWeather();
+
+// 現在地マップの取得（高精度オプション付き）
+if (navigator.geolocation) {
+navigator.geolocation.getCurrentPosition(function(p) {
+var lat = p.coords.latitude;
+var lng = p.coords.longitude;
+var ifr = document.getElementById('map-iframe');
+ifr.src = "https://maps.google.co.jp/maps?output=embed&q=" + lat + "," + lng + "&z=16";
+document.getElementById('map-loading').style.display = 'none';
+ifr.style.display = 'block';
+}, function(e) {
+document.getElementById('map-loading').innerText = "📍 位置情報の取得に失敗しました。";
+}, geoOptions);
+}
+};
 </script>
 </body>
 </html>
